@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hello_React</title>
+</head>
+<!--前两个js引入是有顺序的，必须先核心库再是扩展库-->
+<script src="../js/17.0/react.development17.0.js"></script>
+<script src="../js/17.0/react-dom.development17.0.js"></script>
+<!--用于将jsx翻译成js的-->
+<script src="../js/babel.min.js"></script>
+<!--用于对属性标签进行限制-->
+<script src="../js/prop-types.js"></script>
+<body>
+<div id="test"></div>
+</body>
+<!--一定要写text/babel-->
+<script type="text/babel">
+  class Number extends React.Component {
+
+    state = {
+      num: 10
+    }
+
+    change() {
+      const {num} = this.state
+
+      this.setState({
+        num: num + 10
+      })
+    }
+
+    // 父组件render时子组件没有重新挂载，而是进行了更新
+    render() {
+      return (
+          <div>
+            <button onClick={() => this.change()}>点我加10</button>
+            <Count num={this.state.num}/>
+          </div>
+      )
+    }
+  }
+
+  class Count extends React.Component {
+
+    constructor(props) {
+      console.log('Count:constructor')
+      super(props);
+    }
+
+    state = {
+      count: 0
+    }
+
+    static propTypes = {
+      num: PropTypes.number
+    }
+
+    add() {
+      const {count} = this.state
+      this.setState({
+        count: count + 1
+      })
+    }
+
+    forceChange() {
+      // const {count} = this.state
+      // this.forceUpdate({
+      //   count: count + 10
+      // })
+      this.forceUpdate() // MD,不能传对象
+    }
+
+    letItGo() {
+      ReactDOM.unmountComponentAtNode(document.getElementById('test'))
+    }
+
+    // 需要写成static，在挂载和更新都会调用
+    // 需要返回一个state对象，或者null，返回state对象，将会覆盖this.state，并且之后的更新将不会起作用，返回null什么都不会发生
+    // 此方法使用罕见，原则是：如果state将要完全取决于props时可以使用
+    // static getDerivedStateFromProps(props, state) {
+    //   console.log('Count:getDerivedStateFromProps', state, props);
+    //   return null
+    // }
+
+    // 在render之后，即将要提交DOM之前调用
+    // 可以获得一些更新之前的快照，例如视口，滚动高度等等
+    // 需要返回null，或者一个snapshot，snapshot可以是任何值，取决你在更新前想要获取什么
+    // snapshot会在componentDidUpdate中作为参数传入
+    getSnapshotBeforeUpdate() {
+      console.log('Count:getSnapshotBeforeUpdate');
+      return 1
+    }
+
+    // 组件将要挂载，是可以setState的
+    // 在新的版本中，componentWillMount钩子不被推荐或者被删除
+    // 需要使用UNSAFE_componentWillMount
+    // 原因是这三个钩子遭到太多的滥用，且在未来的版本中react推出异步更新，这三个钩子可能会带来问题
+    UNSAFE_componentWillMount() {
+      // this.setState({
+      //   count: 100
+      // })
+      console.log('Count:UNSAFE_componentWillMount')
+    }
+
+    // 组件已经挂载，常用
+    componentDidMount() {
+      console.log('Count:ComponentDidMount')
+    }
+
+    // 组件将要卸载，常用
+    componentWillUnmount() {
+      console.log('Count:componentWillUnmount')
+    }
+
+    // 组件是否要更新，返回true更新，返回false不更新，不写会有一个默认返回true的，写了必须返回一个布尔值
+    shouldComponentUpdate() {
+      console.log('Count:shouldComponentUpdate')
+      return true
+    }
+
+    // 组件将要更新
+    // 在新的版本中，componentWillUpdate钩子不被推荐或者被删除
+    // 需要使用UNSAFE_componentWillUpdate
+    // 原因是这三个钩子遭到太多的滥用，且在未来的版本中react推出异步更新，这三个钩子可能会带来问题
+    UNSAFE_componentWillUpdate() {
+      console.log('Count:UNSAFE_componentWillUpdate')
+    }
+
+    // 组件已经更新
+    // 可以有三个参数，之前的props，之前的state，getSnapshotBeforeUpdate返回的snapshot
+    componentDidUpdate(preProps, preState, snapshot) {
+      console.log('Count:ComponentDidUpdate', preProps, preState, snapshot)
+    }
+
+    // 组件将要接受到新的props，父组件第一次render不算
+    // 在新的版本中，componentWillReceiveProps钩子不被推荐或者被删除
+    // 需要使用UNSAFE_componentWillReceiveProps
+    // 原因是这三个钩子遭到太多的滥用，且在未来的版本中react推出异步更新，这三个钩子可能会带来问题
+    UNSAFE_componentWillReceiveProps(props) {
+      console.log(props)
+      console.log('Count:UNSAFE_componentWillReceiveProps')
+    }
+
+    // 自己setState会render，父组件render了子组件也会render
+    render() {
+      console.log('Count:render')
+      const {count} = this.state
+      return (
+          <div>
+            <h2>当前为: {count}</h2>
+            <h2>当前大数为: {this.props.num}</h2>
+            <button onClick={() => this.add()}>点我+1</button>
+            <button onClick={() => this.letItGo()}>卸载组件</button>
+            <button onClick={() => this.forceChange()}>强制更新</button>
+          </div>
+      )
+    }
+  }
+
+  ReactDOM.render(<Number/>, document.getElementById('test'))
+</script>
+</html>
+
+
+
+
+
+
+
+
+

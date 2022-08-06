@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hello_React</title>
+</head>
+<!--前两个js引入是有顺序的，必须先核心库再是扩展库-->
+<script src="../js/react.development.js"></script>
+<script src="../js/react-dom.development.js"></script>
+<!--用于将jsx翻译成js的-->
+<script src="../js/babel.min.js"></script>
+<!--用于对属性标签进行限制-->
+<script src="../js/prop-types.js"></script>
+<body>
+  <div id="test"></div>
+</body>
+<!--一定要写text/babel-->
+<script type="text/babel">
+  class Number extends React.Component {
+
+    state = {
+      num: 10
+    }
+
+    change() {
+      const {num} = this.state
+
+      this.setState({
+        num: num + 10
+      })
+    }
+
+    // 父组件render时子组件没有重新挂载，而是进行了更新
+    render() {
+      return (
+          <div>
+            <button onClick={() => this.change()}>点我加10</button>
+            <Count num={this.state.num}/>
+          </div>
+      )
+    }
+  }
+
+  class Count extends React.Component {
+
+    constructor(props) {
+      console.log('Count:constructor')
+      super(props);
+    }
+
+    state = {
+      count: 0
+    }
+
+    static propTypes = {
+      num: PropTypes.number
+    }
+
+    add() {
+      const {count} = this.state
+      this.setState({
+        count: count + 1
+      })
+    }
+
+    forceChange() {
+      // const {count} = this.state
+      // this.forceUpdate({
+      //   count: count + 10
+      // })
+      this.forceUpdate() // MD,不能传对象
+    }
+
+    letItGo() {
+      ReactDOM.unmountComponentAtNode(document.getElementById('test'))
+    }
+
+    // 组件将要挂载，是可以setState的
+    componentWillMount() {
+      // this.setState({
+      //   count: 100
+      // })
+      console.log('Count:ComponentWillMount')
+    }
+
+    // 组件已经挂载，常用
+    componentDidMount() {
+      console.log('Count:ComponentDidMount')
+    }
+
+    // 组件将要卸载，常用
+    componentWillUnmount() {
+      console.log('Count:componentWillUnmount')
+    }
+
+    // 组件是否要更新，返回true更新，返回false不更新，不写会有一个默认返回true的，写了必须返回一个布尔值
+    shouldComponentUpdate() {
+      console.log('Count:shouldComponentUpdate')
+      return true
+    }
+
+    // 组件将要更新
+    componentWillUpdate() {
+      console.log('Count:ComponentWillUpdate')
+    }
+
+    // 组件已经更新
+    componentDidUpdate() {
+      console.log('Count:ComponentDidUpdate')
+    }
+
+    // 组件将要接受到新的props，父组件第一次render不算
+    componentWillReceiveProps(props) {
+      console.log(props)
+      console.log('Count:componentWillReceiveProps')
+    }
+
+    // 自己setState会render，父组件render了子组件也会render
+    render() {
+      console.log('Count:render')
+      const {count} = this.state
+      return (
+          <div>
+            <h2>当前为: {count}</h2>
+            <h2>当前大数为: {this.props.num}</h2>
+            <button onClick={() => this.add()}>点我+1</button>
+            <button onClick={() => this.letItGo()}>卸载组件</button>
+            <button onClick={() => this.forceChange()}>强制更新</button>
+          </div>
+      )
+    }
+  }
+
+  ReactDOM.render(<Number/>, document.getElementById('test'))
+</script>
+</html>
+
+
+
+
+
+
+
+

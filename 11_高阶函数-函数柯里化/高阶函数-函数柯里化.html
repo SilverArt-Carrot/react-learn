@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hello_React</title>
+</head>
+<!--前两个js引入是有顺序的，必须先核心库再是扩展库-->
+<script src="../js/react.development.js"></script>
+<script src="../js/react-dom.development.js"></script>
+<!--用于将jsx翻译成js的-->
+<script src="../js/babel.min.js"></script>
+<body>
+<div id="test"></div>
+</body>
+<!--一定要写text/babel-->
+<script type="text/babel">
+  class Login extends React.Component {
+
+    state = {
+      username: '',
+      password: ''
+    }
+
+    handleSubmit = (e) => {
+      // 阻止默认的表单提交，阻止冒泡
+      e.preventDefault()
+      const {username, password} = this.state
+      // 从状态中维护，即受控组件，更少的使用ref，更加推荐，与vue中双向绑定原理是一样的，react更加灵活
+      alert(`username is ${username}, password is ${password}`)
+    }
+
+    // 将表单的数据保存到state
+    // 下面三种写法都可以
+    // 今天，我对事件的回调函数有了新的理解
+    // 首先，不要纠结什么，只要传给回调属性的是一个函数即可，且要保证this为实例
+
+    // 回调属性写成 onChange={e => this.saveFormData(e, 'username')}
+    // saveFormData(e, key) {
+    //   this.setState({
+    //     [key]: e.target.value
+    //   })
+    // }
+
+    // 回调属性写成 onChange={e => this.saveFormData(e, 'username')}
+    // saveFormData = (e, key) => {
+    //   this.setState({
+    //     [key]: e.target.value
+    //   })
+    // }
+
+    // 还可以怎么写，这种方式是函数柯里化
+    // 那回调属性写成 onChange={this.saveFormData('username')}
+    saveFormData = key => {
+      return e => {
+        this.setState({
+          [key]: e.target.value
+        })
+      }
+    }
+
+    // 高阶函数，只要满足以下两点中的一点即可
+    //    1.接受的参数是一个函数
+    //    2.返回值是一个函数
+    //    常见的有：Promise，setTimeout，arr.map()等等
+    // 函数柯里化：通过函数调用继续返回函数的方式，实现多次接受参数最后统一处理的函数编码形式（见js复习）
+
+    render() {
+      return (
+          <form onSubmit={this.handleSubmit}>
+            用户名：<input type="text" name="username" onChange={this.saveFormData('username')}/>
+            密码：<input type="password"  name="password" onChange={this.saveFormData('password')}/>
+            <button type="submit">登录</button>
+          </form>
+      )
+    }
+  }
+
+  ReactDOM.render(<Login/>, document.getElementById('test'))
+</script>
+</html>
+
+
+
+
+
+
+

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hello_React</title>
+</head>
+<!--前两个js引入是有顺序的，必须先核心库再是扩展库-->
+<script src="../js/react.development.js"></script>
+<script src="../js/react-dom.development.js"></script>
+<!--用于将jsx翻译成js的-->
+<script src="../js/babel.min.js"></script>
+<body>
+<div id="test"></div>
+</body>
+<!--一定要写text/babel-->
+<script type="text/babel">
+  class Demo extends React.Component {
+
+    // 返回一个容器，此容器保存了myRef所标识的节点，容器只能存一个节点
+    myRef = React.createRef()
+
+    showData() {
+      // 从key为current中取到节点
+      alert(this.myRef.current.value)
+    }
+
+    render() {
+      return (
+          <div>
+            <input ref={this.myRef} type="text" placeholder="请点击按钮展示输入"/>
+            &nbsp;
+            <button onClick={() => this.showData()}>点击按钮提示左边的输入</button>
+          </div>
+      )
+    }
+  }
+
+  ReactDOM.render(<Demo/>, document.getElementById('test'))
+</script>
+</html>
+
+
+
+

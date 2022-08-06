@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hello_React</title>
+</head>
+<!--前两个js引入是有顺序的，必须先核心库再是扩展库-->
+<script src="../js/react.development.js"></script>
+<script src="../js/react-dom.development.js"></script>
+<!--用于将jsx翻译成js的-->
+<script src="../js/babel.min.js"></script>
+<body>
+  <div id="test"></div>
+</body>
+<!--一定要写text/babel-->
+<script type="text/babel">
+ class Login extends React.Component {
+
+   handleSubmit = (e) => {
+     // 阻止默认的表单提交
+    e.preventDefault()
+     const {username, password} = this
+     // 现用现取，即非受控组件
+     alert(`username is ${username.value}, password is ${password.value}`)
+   }
+
+   render() {
+     return (
+         <form onSubmit={this.handleSubmit}>
+           用户名：<input type="text" ref={c => this.username = c} name="username"/>
+           密码：<input type="password" ref={c => this.password = c} name="password"/>
+           <button type="submit">登录</button>
+         </form>
+     )
+   }
+ }
+
+ ReactDOM.render(<Login/>, document.getElementById('test'))
+</script>
+</html>
+
+
+
+
+
+

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <!--前两个js引入是有顺序的，必须先核心库再是扩展库-->
+  <script src="../js/react.development.js"></script>
+  <script src="../js/react-dom.development.js"></script>
+<body>
+  <div id="test"></div>
+</body>
+<script type="text/javascript">
+  // 1. 创建虚拟DOM
+  // 参数：标签名称，标签属性，标签内容
+  const virtualDOM = React.createElement('h1', {id: 'title'}, 'Hello, React')
+  // 2. 渲染虚拟DOM到页面
+  ReactDOM.render(virtualDOM, document.getElementById('test'))
+</script>
+</html>

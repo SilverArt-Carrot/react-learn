@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hello_React</title>
+</head>
+<!--前两个js引入是有顺序的，必须先核心库再是扩展库-->
+<script src="../js/react.development.js"></script>
+<script src="../js/react-dom.development.js"></script>
+<!--用于将jsx翻译成js的-->
+<script src="../js/babel.min.js"></script>
+<body>
+  <div id="test"></div>
+</body>
+<!--一定要写text/babel-->
+<script type="text/babel">
+  /**
+   * 区分【js表达式】和【js（语句）代码】
+   *  1.表达式：一个表达式会产生一个值，可以放在任何一个需要值的地方
+   *    例如：
+   *      （1） a
+   *      （2） a + b
+   *      （3） demo(1)
+   *      （4） arr.map()
+   *      （5） function test() {}
+   *   2.语句（代码）：
+   *    例如：
+   *      （1） if() {}
+   *      （2） for() {}
+   *      （3） switch() {case:xxx}
+   *      （4） while(xxx) {}
+   */
+  const data = ['Angular', 'React', 'Vue']
+  const VirtualDom = (
+      <div>
+        <h1>前端js框架列表</h1>
+        <ul>
+          {
+            data.map((item, index) => {
+              return <li key={index}>{item}</li>
+            })
+          }
+        </ul>
+      </div>
+  )
+  ReactDOM.render(VirtualDom, document.getElementById('test'))
+</script>
+</html>
+
+

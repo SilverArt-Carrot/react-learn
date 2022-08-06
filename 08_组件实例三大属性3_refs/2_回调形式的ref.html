@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hello_React</title>
+</head>
+<!--前两个js引入是有顺序的，必须先核心库再是扩展库-->
+<script src="../js/react.development.js"></script>
+<script src="../js/react-dom.development.js"></script>
+<!--用于将jsx翻译成js的-->
+<script src="../js/babel.min.js"></script>
+<body>
+<div id="test"></div>
+</body>
+<!--一定要写text/babel-->
+<script type="text/babel">
+  class Demo extends React.Component {
+
+    showData() {
+      const {input1} = this
+      alert(input1.value)
+    }
+
+    showData2 = () => {
+      const {input2} = this
+      alert(input2.value)
+    }
+
+    saveInput = (c) => {
+      this.input2 = c
+    }
+
+    render() {
+      return (
+          <div>
+            当react执行render()的时候会调用ref中的回调函数，回调函数的参数为当前节点<br/>
+            箭头函数没有this，会向外寻找，找到的是当前实例<br/>
+            此处将当前节点挂在实例上，并取名this<br/>
+            <input ref={(currentNode) => {this.input1 = currentNode}} type="text" placeholder="请点击按钮展示输入"/>
+            &nbsp;
+            <button onClick={() => this.showData()}>点击按钮提示左边的输入</button>
+            &nbsp;
+            不用内联函数的写法可以避免ref中的回调函数在render的时候调用两次
+            <input onBlur={this.showData2} ref={this.saveInput} type="text" placeholder="失去焦点展示输入"/>
+          </div>
+      )
+    }
+  }
+
+  ReactDOM.render(<Demo/>, document.getElementById('test'))
+</script>
+</html>

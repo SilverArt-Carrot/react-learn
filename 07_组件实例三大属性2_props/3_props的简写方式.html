@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hello_React</title>
+</head>
+<!--前两个js引入是有顺序的，必须先核心库再是扩展库-->
+<script src="../js/react.development.js"></script>
+<script src="../js/react-dom.development.js"></script>
+<!--用于将jsx翻译成js的-->
+<script src="../js/babel.min.js"></script>
+<!--用于对属性标签进行限制-->
+<script src="../js/prop-types.js"></script>
+<body>
+<div id="test"></div>
+<div id="test2"></div>
+</body>
+<!--一定要写text/babel-->
+<script type="text/babel">
+  class Person extends React.Component {
+
+    // 构造器是否接受props，是否传递给super，取决于在构造器中
+    // 是否想通过this调用props
+    constructor(props) {
+      super(props);
+      console.log("constructor:", this.props)
+    }
+
+    // 对属性进行限制，使用static加在类上，而不是实例上
+    static propTypes = {
+      name: PropTypes.string.isRequired,
+      sex: PropTypes.string,
+      age: PropTypes.number,
+      speak: PropTypes.func  // 限制传入的是一个函数
+    }
+    // 对属性添加默认值
+    static  defaultProps = {
+      sex: '不男不女',
+      age: 18
+    }
+
+    render() {
+      const {name, age, sex} = this.props
+      // props是只读的,以下是报错的
+      // this.props.name = 'lll'
+      return (
+          <ul>
+            <li>姓名：{name}</li>
+            <li>年龄：{age + 1}</li>
+            <li>性别：{sex}</li>
+          </ul>
+      )
+    }
+  }
+
+  ReactDOM.render(<Person name="lqy" age={22} sex="男" speak={speak}/>, document.getElementById('test'))
+
+
+  const data = {name: '帅哥', age: 23}
+  // 展开一个对象，是通过babel和react实现的，且只能用于标签中，不是es6的展开语法，es6不能展开对象
+  ReactDOM.render(<Person {...data}/>, document.getElementById('test2'))
+
+  function speak() {
+    console.log('我说话了')
+  }
+</script>
+</html>
+
