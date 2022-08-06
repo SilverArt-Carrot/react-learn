@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello_React</title>
+</head>
+<!--前两个js引入是有顺序的，必须先核心库再是扩展库-->
+<script src="../js/react.development.js"></script>
+<script src="../js/react-dom.development.js"></script>
+<!--用于将jsx翻译成js的-->
+<script src="../js/babel.min.js"></script>
+<!--用于对属性标签进行限制-->
+<script src="../js/prop-types.js"></script>
+<body>
+    <div id="test"></div>
+</body>
+<!--一定要写text/babel-->
+<script type="text/babel">
+    class Time extends React.Component {
+
+        state = {
+            now: new Date()
+        }
+
+        componentDidMount() {
+            setInterval(() => {
+                this.setState({
+                    now: new Date()
+                })
+            }, 1000)
+        }
+
+        // 发现只有<span>节点中部分变了，证明Diffing算法存在
+        render() {
+            const {now} = this.state
+            return (
+                <div>
+                    <h1>Hello</h1>
+                    <input type="text"/>
+                    <span>
+                        现在是: {now.toTimeString()}
+                        <input type="text"/>
+                    </span>
+                </div>
+            )
+        }
+    }
+
+    ReactDOM.render(<Time/>, document.getElementById('test'))
+</script>
+</html>
